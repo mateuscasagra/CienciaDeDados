@@ -25,6 +25,21 @@ class xlsClass:
         return retorno
         
 
+    def trazDados(self, colunas):
+        todosDados = []
+        dados = self.aplicaRegras()
+        for i in colunas:
+            for x in dados:
+                todosDados = [x[i]]
+
+        return todosDados
+    
+
+        
+
+
+
+
     
     
 
