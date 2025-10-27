@@ -8,5 +8,6 @@ class calculosClass:
         
     @staticmethod
     def desvioPadrao(dados: pd.Series):
-         return dados.std(ddof=0)
+         return np.std(dados, ddof=0)
+            
             
