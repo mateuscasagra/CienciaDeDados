@@ -4,10 +4,10 @@ import graficos
 leitor = xlsClass('excel/dados.xlsx')
 
 
-colunas = ['idade']
+colunas = ['mortos']
 dadosFiltrados = leitor.trazDados(colunas)
-media = calculosClass.media(dadosFiltrados)
 
+media = calculosClass.media(dadosFiltrados)
 stringResult = f"Média das idades: {media}"
 with open('relatorio-de-saida.txt', 'w', encoding='utf-8') as f:
     f.write(stringResult)
