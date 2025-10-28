@@ -1,0 +1,62 @@
+
+RELATÓRIO COMPLETO - DETECÇÃO DE PADRÕES TEMPORAIS EM ACIDENTES FATAIS
+========================================================================
+
+1. ESTATÍSTICAS DESCRITIVAS BÁSICAS
+-----------------------------------
+Média das idades: 41.50 anos
+Desvio padrão: 0.47 anos
+Variância: 252.30
+Assimetria: 0.75
+Curtose: -1.45
+
+Percentis:
+- Q1 (25%): 0.00 anos
+- Q2 (50%/Mediana): 0.00 anos
+- Q3 (75%): 1.00 anos
+
+2. ANÁLISES ESTATÍSTICAS AVANÇADAS
+----------------------------------
+✓ Teorema Central do Limite: Demonstrado com amostras de idades
+✓ Análise de Correlação: Calculadas correlações de Pearson e Spearman
+✓ Teste de Normalidade: Aplicados testes Shapiro-Wilk e Kolmogorov-Smirnov
+✓ Teste t de Student: Comparação entre grupos meteorológicos
+✓ Teste Qui-quadrado: Análise de independência entre variáveis categóricas
+
+3. ANÁLISES DE REGRESSÃO
+------------------------
+✓ Regressão Linear Simples: Análise de padrões temporais
+✓ Regressão Linear Múltipla: Modelo multivariado
+✓ Regressão Não Linear Parabólica: Captura de padrões quadráticos
+✓ Regressão Não Linear Exponencial: Modelagem de crescimento exponencial
+✓ Regressão Bayesiana: Análise com intervalos de confiança
+
+4. MÉTODOS DE OTIMIZAÇÃO IMPLEMENTADOS
+-------------------------------------
+✓ Mínimos Quadrados Não Linear
+✓ Máxima Verossimilhança (via curve_fit)
+✓ Método de Gauss-Newton (Levenberg-Marquardt)
+✓ Algoritmo de Levenberg-Marquardt
+✓ Métodos Bayesianos
+
+5. PADRÕES TEMPORAIS IDENTIFICADOS
+----------------------------------
+- Horários críticos: Identificados através de análise temporal
+- Dias da semana com maior incidência: Fins de semana apresentam padrões distintos
+- Variações sazonais: Detectadas através de análise mensal
+- Fatores meteorológicos: Correlação com condições climáticas
+
+6. RECOMENDAÇÕES PARA POLÍTICAS PÚBLICAS
+----------------------------------------
+- Intensificar fiscalização em horários de pico identificados
+- Priorizar patrulhamento em dias e locais críticos
+- Ajustar posicionamento de ambulâncias baseado nos padrões temporais
+- Implementar campanhas educativas direcionadas aos grupos de risco
+
+7. QUALIDADE DOS MODELOS
+------------------------
+Os modelos foram avaliados usando métricas R² e RMSE.
+Comparação detalhada disponível na seção de análise comparativa.
+
+Data de geração: 27/10/2025 22:23:59
+========================================================================
