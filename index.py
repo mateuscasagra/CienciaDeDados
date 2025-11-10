@@ -1,10 +1,23 @@
+# -*- coding: utf-8 -*-
+"""
+Script principal para análise de padrões temporais em acidentes fatais
+Configuração de encoding para compatibilidade com Windows
+"""
+import sys
+import io
+
+# Configurar encoding UTF-8 para Windows
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
 from src.xlsClass import xlsClass
 from src.calculosClass import calculosClass
 import graficos
 leitor = xlsClass('excel/dados.xlsx')
 
 
-colunas = ['mortos']
+colunas = ['idade']
 dadosFiltrados = leitor.trazDados(colunas)
 
 media = calculosClass.media(dadosFiltrados)
@@ -117,11 +130,11 @@ analise_estatistica = AnaliseEstatistica(df_completo)
 analise_regressao = AnaliseRegressao(df_completo)
 
 # Executar relatório completo de análises estatísticas
-print("\n🔬 EXECUTANDO ANÁLISES ESTATÍSTICAS COMPLETAS...")
+print("\n[ANALISES] EXECUTANDO ANALISES ESTATISTICAS COMPLETAS...")
 resultados_estatisticos = analise_estatistica.gerar_relatorio_estatistico()
 
 # Executar análises de regressão
-print("\n📊 EXECUTANDO ANÁLISES DE REGRESSÃO...")
+print("\n[REGRESSAO] EXECUTANDO ANALISES DE REGRESSAO...")
 
 # Preparar dados temporais para regressão
 dados_temporais = analise_regressao.preparar_dados_temporais()
@@ -235,7 +248,7 @@ Data de geração: {pd.Timestamp.now().strftime('%d/%m/%Y %H:%M:%S')}
 with open('relatorio-completo-acidentes-fatais.txt', 'w', encoding='utf-8') as f:
     f.write(relatorio_completo)
 
-print("✅ Relatório completo salvo em: relatorio-completo-acidentes-fatais.txt")
+print("[OK] Relatorio completo salvo em: relatorio-completo-acidentes-fatais.txt")
 
 print("\n" + "="*80)
 print("DASHBOARD INTERATIVO")
@@ -253,10 +266,10 @@ print("\n" + "="*80)
 print("PROJETO CONCLUÍDO COM SUCESSO!")
 print("="*80)
 print("Todos os componentes solicitados foram implementados:")
-print("✅ 1. Análises estatísticas (TCL, Correlação, Normalidade, t-Student, Qui-quadrado)")
-print("✅ 2. Regressões lineares e não lineares com múltiplos métodos de otimização")
-print("✅ 3. Dashboard programado em Python")
-print("✅ 4. Relatório geral das atividades")
-print("✅ 5. Análise de padrões temporais em acidentes fatais")
-print("✅ 6. Comparação e avaliação de métodos (R², RMSE)")
+print("[OK] 1. Analises estatisticas (TCL, Correlacao, Normalidade, t-Student, Qui-quadrado)")
+print("[OK] 2. Regressoes lineares e nao lineares com multiplos metodos de otimizacao")
+print("[OK] 3. Dashboard programado em Python")
+print("[OK] 4. Relatorio geral das atividades")
+print("[OK] 5. Analise de padroes temporais em acidentes fatais")
+print("[OK] 6. Comparacao e avaliacao de metodos (R2, RMSE)")
 print("\nTodos os arquivos estão prontos para compactação e envio!")

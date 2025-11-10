@@ -9,6 +9,7 @@ from plotly.subplots import make_subplots
 from src.xlsClass import xlsClass
 from src.analises_estatisticas import AnaliseEstatistica
 from src.regressoes import AnaliseRegressao
+from src.machine_learning.ml_streamlit import MLStreamlit
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -23,8 +24,17 @@ st.set_page_config(
 # CSS customizado para forçar light mode
 st.markdown("""
 <style>
-    /* Forçar tema claro em todo o app */
-    .stApp {
+    /* Forçar tema claro em todo o app e todos os elementos filhos */
+    .stApp, .stApp *, html, body, #root {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    
+    /* Resetar todos os backgrounds possíveis do Streamlit */
+    [data-testid="stApp"], [data-testid="stApp"] > div,
+    [data-testid="stHeader"], [data-testid="stToolbar"],
+    .block-container, .element-container,
+    div[data-baseweb="block"], div[data-baseweb="card"] {
         background-color: #ffffff !important;
         color: #000000 !important;
     }
@@ -36,10 +46,17 @@ st.markdown("""
     }
     
     /* Área principal */
-    .main, .css-k1vhr4, .css-18e3th9, .css-1d391kg {
+    .main, [data-testid="stMainContent"],
+    .css-k1vhr4, .css-18e3th9, .css-1d391kg {
         background-color: #ffffff !important;
         color: #000000 !important;
         padding-top: 1rem;
+    }
+    
+    /* Elementos de sidebar expandidos */
+    section[data-testid="stSidebar"] > div,
+    section[data-testid="stSidebar"] * {
+        background-color: #f8f9fa !important;
     }
     
     /* Headers e títulos */
@@ -66,7 +83,13 @@ st.markdown("""
     }
     
     /* Métricas */
-    .stMetric {
+    [data-testid="stMetricValue"], [data-testid="stMetricLabel"],
+    [data-testid="stMetricDelta"], [data-testid="stMetricContainer"] {
+        background-color: #f8f9fa !important;
+        color: #000000 !important;
+    }
+    
+    .stMetric, [data-testid="metric-container"] {
         background-color: #f8f9fa !important;
         padding: 1rem;
         border-radius: 0.5rem;
@@ -125,10 +148,45 @@ st.markdown("""
         border: none !important;
     }
     
-    /* Dataframes */
-    .stDataFrame {
+    /* Dataframes e tabelas */
+    table, thead, tbody, tr, td, th,
+    [data-testid="stDataFrame"], [data-testid="stDataFrame"] > div {
         background-color: #ffffff !important;
         color: #000000 !important;
+    }
+    
+    /* Gráficos container */
+    [data-testid="stPlotlyChart"], [data-testid="stAltairChart"],
+    [data-testid="stDataFrame"], .stPlotlyChart, .plotly {
+        background-color: #ffffff !important;
+    }
+    
+    /* Override global para qualquer fundo escuro */
+    div[style*="rgb(14, 17, 23)"],
+    div[style*="rgba(14, 17, 23"],
+    [style*="background-color: rgb(14, 17, 23)"] {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    
+    /* Force remove dark backgrounds from all divs */
+    div:not([class*="st"]):not([data-testid]) {
+        background-color: #ffffff !important;
+    }
+    
+    /* Markdown content */
+    [data-testid="stMarkdownContainer"],
+    .stMarkdown, [data-testid="stMarkdownContainer"] * {
+        background-color: transparent !important;
+        color: #000000 !important;
+    }
+    
+    /* Sobrepor todas as variáveis CSS do Streamlit que podem causar dark mode */
+    :root {
+        --background-color: #ffffff !important;
+        --primary-color: #1f77b4 !important;
+        --text-color: #000000 !important;
+        --secondary-background-color: #f8f9fa !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -188,10 +246,6 @@ def gerar_dados_simulados():
     })
 
 def main():
-    # Configuração adicional para forçar tema claro
-    if "theme" not in st.session_state:
-        st.session_state.theme = "light"
-    
     # Cabeçalho principal
     st.markdown('<h1 class="main-header">🚗 Dashboard - Detecção de Padrões Temporais em Acidentes Fatais</h1>', 
                 unsafe_allow_html=True)
@@ -200,7 +254,7 @@ def main():
     st.sidebar.title("📊 Navegação")
     opcao = st.sidebar.selectbox(
         "Escolha a análise:",
-        ["Visão Geral", "Análises Estatísticas", "Regressões", "Padrões Temporais", "Comparação de Métodos"]
+        ["Visão Geral", "Análises Estatísticas", "Regressões", "Padrões Temporais", "Machine Learning", "Comparação de Métodos"]
     )
     
     # Carregar dados
@@ -215,6 +269,8 @@ def main():
         mostrar_regressoes(df_simulado)
     elif opcao == "Padrões Temporais":
         mostrar_padroes_temporais(df_simulado)
+    elif opcao == "Machine Learning":
+        mostrar_machine_learning(df_original)
     elif opcao == "Comparação de Métodos":
         mostrar_comparacao_metodos(df_simulado)
 
@@ -720,6 +776,162 @@ def mostrar_comparacao_metodos(df):
                 </ul>
                 </div>
                 """, unsafe_allow_html=True)
+
+def mostrar_machine_learning(df):
+    """Mostra análises de Machine Learning com gráficos interativos."""
+    st.markdown('<h2 class="section-header">🤖 Machine Learning - Detecção de Padrões</h2>', unsafe_allow_html=True)
+    
+    # Informações sobre o sistema ML
+    st.markdown("""
+    <div class="info-box">
+    <h3>🎯 Sistema de Machine Learning</h3>
+    <p>Este sistema utiliza algoritmos avançados para detectar padrões temporais em acidentes fatais e prever a gravidade dos acidentes com base em características específicas.</p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Botão para executar análise ML
+    if st.button("🚀 Executar Análise de Machine Learning", type="primary"):
+        with st.spinner("Executando análises de Machine Learning... Isso pode levar alguns minutos."):
+            try:
+                # Inicializar classe ML
+                ml = MLStreamlit()
+                
+                # Carregar e preparar dados
+                dados = ml.carregar_dados()
+                
+                if dados is not None and not dados.empty:
+                    st.success(f"✅ Dados carregados com sucesso! Total de registros: {len(dados)}")
+                    
+                    # Tabs para organizar as análises
+                    tab1, tab2, tab3, tab4 = st.tabs(["📊 Clustering", "🎯 Classificação", "📈 Métricas", "📋 Relatório"])
+                    
+                    with tab1:
+                        st.subheader("🔍 Análise de Clustering (K-Means)")
+                        
+                        # Executar clustering
+                        resultado_clustering = ml.executar_clustering(dados)
+                        
+                        if resultado_clustering:
+                            # Gráfico de clusters
+                            fig_clusters = ml.criar_grafico_clusters(resultado_clustering['dados_com_clusters'])
+                            st.plotly_chart(fig_clusters, use_container_width=True)
+                            
+                            # Métricas de clustering
+                            col1, col2 = st.columns(2)
+                            with col1:
+                                st.metric("Silhouette Score", f"{resultado_clustering['silhouette_score']:.3f}")
+                            with col2:
+                                st.metric("Número de Clusters", resultado_clustering['n_clusters'])
+                            
+                            # Resumo dos clusters
+                            st.subheader("📋 Resumo dos Clusters")
+                            resumo_clusters = ml.gerar_resumo_clusters(resultado_clustering['dados_com_clusters'])
+                            st.dataframe(resumo_clusters, use_container_width=True)
+                    
+                    with tab2:
+                        st.subheader("🎯 Classificação de Acidentes Fatais")
+                        
+                        # Executar classificação
+                        resultado_classificacao = ml.executar_classificacao(dados)
+                        
+                        if resultado_classificacao:
+                            # Gráfico de performance dos modelos
+                            fig_performance = ml.criar_grafico_performance_modelos(resultado_classificacao['resultados'])
+                            st.plotly_chart(fig_performance, use_container_width=True)
+                            
+                            # Melhor modelo
+                            melhor_modelo = resultado_classificacao['melhor_modelo']
+                            st.success(f"🏆 Melhor Modelo: {melhor_modelo['nome']} (F1-Score: {melhor_modelo['f1_score']:.3f})")
+                            
+                            # Matriz de confusão do melhor modelo
+                            fig_confusion = ml.criar_matriz_confusao(melhor_modelo['matriz_confusao'])
+                            st.plotly_chart(fig_confusion, use_container_width=True)
+                            
+                            # Importância das features (se disponível)
+                            if 'importancia_features' in melhor_modelo:
+                                fig_features = ml.criar_grafico_importancia_features(melhor_modelo['importancia_features'])
+                                st.plotly_chart(fig_features, use_container_width=True)
+                    
+                    with tab3:
+                        st.subheader("📈 Métricas Detalhadas")
+                        
+                        if 'resultado_classificacao' in locals() and resultado_classificacao:
+                            # Tabela de métricas
+                            metricas_df = ml.calcular_metricas_detalhadas(resultado_classificacao['resultados'])
+                            st.dataframe(metricas_df.style.highlight_max(subset=['Accuracy', 'F1-Score', 'Precision', 'Recall']), 
+                                       use_container_width=True)
+                            
+                            # Gráfico radar das métricas
+                            fig_radar = ml.criar_grafico_radar_metricas(metricas_df)
+                            st.plotly_chart(fig_radar, use_container_width=True)
+                    
+                    with tab4:
+                        st.subheader("📋 Relatório Executivo")
+                        
+                        # Gerar resumo executivo
+                        resumo = ml.gerar_resumo_executivo(dados, 
+                                                         resultado_clustering if 'resultado_clustering' in locals() else None,
+                                                         resultado_classificacao if 'resultado_classificacao' in locals() else None)
+                        
+                        # Exibir resumo
+                        for secao, conteudo in resumo.items():
+                            st.markdown(f"### {secao}")
+                            if isinstance(conteudo, dict):
+                                for key, value in conteudo.items():
+                                    st.write(f"**{key}:** {value}")
+                            else:
+                                st.write(conteudo)
+                            st.markdown("---")
+                        
+                        # Recomendações
+                        recomendacoes = ml.gerar_recomendacoes(
+                            resultado_classificacao if 'resultado_classificacao' in locals() else None
+                        )
+                        
+                        st.subheader("🎯 Recomendações para Políticas Públicas")
+                        for i, rec in enumerate(recomendacoes, 1):
+                            st.markdown(f"**{i}.** {rec}")
+                
+                else:
+                    st.error("❌ Erro ao carregar os dados. Verifique se o arquivo Excel está disponível.")
+                    
+            except Exception as e:
+                st.error(f"❌ Erro durante a execução: {str(e)}")
+                st.info("💡 Dica: Verifique se todos os arquivos necessários estão presentes e se as dependências estão instaladas.")
+    
+    else:
+        # Mostrar informações sobre o que será executado
+        st.markdown("""
+        <div class="info-box">
+        <h3>🔍 O que será executado:</h3>
+        <ul>
+            <li><strong>Clustering K-Means:</strong> Identificação de grupos de acidentes com características similares</li>
+            <li><strong>Classificação:</strong> Predição de acidentes fatais usando múltiplos algoritmos</li>
+            <li><strong>Avaliação de Modelos:</strong> Comparação de performance entre diferentes algoritmos</li>
+            <li><strong>Análise de Features:</strong> Identificação dos fatores mais importantes</li>
+            <li><strong>Relatório Executivo:</strong> Resumo dos resultados e recomendações</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Algoritmos utilizados
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("""
+            **🔬 Algoritmos de Clustering:**
+            - K-Means
+            - Análise de Silhouette
+            """)
+        
+        with col2:
+            st.markdown("""
+            **🎯 Algoritmos de Classificação:**
+            - Decision Tree
+            - Random Forest
+            - K-Nearest Neighbors (KNN)
+            - Neural Network (MLP)
+            """)
 
 if __name__ == "__main__":
     main()

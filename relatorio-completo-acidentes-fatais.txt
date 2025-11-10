@@ -5,15 +5,15 @@ RELATÓRIO COMPLETO - DETECÇÃO DE PADRÕES TEMPORAIS EM ACIDENTES FATAIS
 1. ESTATÍSTICAS DESCRITIVAS BÁSICAS
 -----------------------------------
 Média das idades: 41.50 anos
-Desvio padrão: 0.47 anos
+Desvio padrão: 13.89 anos
 Variância: 252.30
-Assimetria: 0.75
-Curtose: -1.45
+Assimetria: 0.56
+Curtose: -0.46
 
 Percentis:
-- Q1 (25%): 0.00 anos
-- Q2 (50%/Mediana): 0.00 anos
-- Q3 (75%): 1.00 anos
+- Q1 (25%): 25.00 anos
+- Q2 (50%/Mediana): 39.00 anos
+- Q3 (75%): 46.00 anos
 
 2. ANÁLISES ESTATÍSTICAS AVANÇADAS
 ----------------------------------
@@ -58,5 +58,5 @@ Percentis:
 Os modelos foram avaliados usando métricas R² e RMSE.
 Comparação detalhada disponível na seção de análise comparativa.
 
-Data de geração: 27/10/2025 22:23:59
+Data de geração: 09/11/2025 20:53:28
 ========================================================================

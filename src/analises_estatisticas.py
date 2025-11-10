@@ -78,9 +78,9 @@ class AnaliseEstatistica:
         print(f"Teste de normalidade (p-valor): {p_valor_normalidade:.4f}")
         
         if p_valor_normalidade > 0.05:
-            print("✓ As médias amostrais seguem distribuição normal (TCL confirmado)")
+            print("[OK] As medias amostrais seguem distribuicao normal (TCL confirmado)")
         else:
-            print("⚠ As médias amostrais não seguem distribuição normal perfeitamente")
+            print("[AVISO] As medias amostrais nao seguem distribuicao normal perfeitamente")
         
         return resultados
     
@@ -170,9 +170,9 @@ class AnaliseEstatistica:
         print(f"  Kolmogorov-Smirnov: estatística={ks_stat:.4f}, p-valor={ks_p:.4f}")
         
         if shapiro_p > 0.05 and ks_p > 0.05:
-            print("✓ A variável segue distribuição normal")
+            print("[OK] A variavel segue distribuicao normal")
         else:
-            print("⚠ A variável não segue distribuição normal")
+            print("[AVISO] A variavel nao segue distribuicao normal")
         
         # Cálculo de probabilidades usando distribuição normal
         prob_menor_media = norm.cdf(media, media, desvio)
@@ -248,9 +248,9 @@ class AnaliseEstatistica:
                 print(f"  P-valor: {p_valor:.4f}")
                 
                 if p_valor < 0.05:
-                    print("  ✓ Diferença estatisticamente significativa (p < 0.05)")
+                    print("  [OK] Diferenca estatisticamente significativa (p < 0.05)")
                 else:
-                    print("  ⚠ Diferença não significativa (p ≥ 0.05)")
+                    print("  [AVISO] Diferenca nao significativa (p >= 0.05)")
                 
                 resultados[f"{grupo1_nome}_vs_{grupo2_nome}"] = {
                     't_stat': t_stat,
@@ -292,15 +292,15 @@ class AnaliseEstatistica:
         chi2_stat, p_valor, dof, expected = stats.chi2_contingency(tabela_contingencia)
         
         print(f"\nResultados do teste:")
-        print(f"  Estatística χ²: {chi2_stat:.4f}")
+        print(f"  Estatistica Qui-quadrado: {chi2_stat:.4f}")
         print(f"  Graus de liberdade: {dof}")
         print(f"  P-valor: {p_valor:.4f}")
-        print(f"  Valor crítico (α=0.05): {chi2.ppf(0.95, dof):.4f}")
+        print(f"  Valor critico (alpha=0.05): {chi2.ppf(0.95, dof):.4f}")
         
         if p_valor < 0.05:
-            print("  ✓ As variáveis são dependentes (p < 0.05)")
+            print("  [OK] As variaveis sao dependentes (p < 0.05)")
         else:
-            print("  ⚠ As variáveis são independentes (p ≥ 0.05)")
+            print("  [AVISO] As variaveis sao independentes (p >= 0.05)")
         
         # Frequências esperadas
         print("\nFrequências esperadas:")
